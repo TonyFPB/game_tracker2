@@ -25,3 +25,7 @@ export async function findGameById(game_id: Number): Promise<QueryResult<GameEnt
 export async function updateGame(game_id: Number) {
     return connection.query(`UPDATE games SET completed=true WHERE id=$1`, [game_id])
 }
+
+export async function delGame(game_id: Number) {
+    return connection.query("DELETE FROM games WHERE id=$1",[game_id])
+}
