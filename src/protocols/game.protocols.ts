@@ -17,4 +17,12 @@ type GameInsertType = {
     type_id: number
 }
 
-export { Game, GameEntity, GameInsertType }
+type GamesAll = {
+    id: number,
+    name: string,
+    completed: boolean,
+    type_id: number,
+    type: string
+}
+
+export { Game, GameEntity, GameInsertType, GamesAll }
