@@ -2,27 +2,27 @@ import { type } from "os"
 
 type GameEntity = {
     id: Number,
-    name: string,
+    name: String,
     type: Number,
-    completed: boolean
+    completed: Boolean
 }
 
 type Game = {
-    name: string,
-    type: string
+    name: String,
+    type: String
 }
 
 type GameInsertType = {
-    name: string,
-    type_id: number
+    name: String,
+    type_id: Number
 }
 
 type GamesAll = {
-    id: number,
-    name: string,
-    completed: boolean,
-    type_id: number,
-    type: string
+    id: Number,
+    name: String,
+    completed: Boolean,
+    type_id: Number,
+    type: String
 }
 
 export { Game, GameEntity, GameInsertType, GamesAll }
