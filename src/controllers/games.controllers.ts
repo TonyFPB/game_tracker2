@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { GameEntity, GameInsertType } from "../protocols/game.protocols.js";
-import { findAllGames, findGamesWithQuery, insertGame, updateGame } from "../repositories/games.repositories.js";
+import { delGame, findAllGames, findGamesWithQuery, insertGame, updateGame } from "../repositories/games.repositories.js";
 
 
 export async function getGame(req: Request, res: Response) {
@@ -39,6 +39,17 @@ export async function putGame(req: Request, res: Response) {
     const game = res.locals as GameEntity
     try {
         await updateGame(game.id)
+        res.sendStatus(200)
+    } catch (err) {
+        console.log(err)
+        res.sendStatus(500)
+    }
+}
+
+export async function deleteGame(req: Request, res: Response) {
+    const game = res.locals as GameEntity
+    try {
+        await delGame(game.id)
         res.sendStatus(200)
     } catch (err) {
         console.log(err)
