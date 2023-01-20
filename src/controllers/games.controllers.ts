@@ -3,19 +3,22 @@ import { GameEntity, GameInsertType } from "../protocols/game.protocols.js";
 import { delGame, findAllGames, findGamesWithQuery, insertGame, updateGame } from "../repositories/games.repositories.js";
 
 
-export async function getGame(req: Request, res: Response) {
+export async function getGame(req: Request, res: Response): Promise<void> {
     const game = req.query.game as String
     try {
         if (game) {
             const games = await findGamesWithQuery(game.toLowerCase())
             if (games.rowCount === 0) {
-                return res.sendStatus(404)
+                res.sendStatus(404)
+                return;
             }
-            return res.send(games.rows)
+            res.send(games.rows)
+            return;
         }
         if (!game) {
             const games = await findAllGames()
-            return res.send(games.rows)
+            res.send(games.rows)
+            return;
         }
     } catch (err) {
         console.log(err)
@@ -23,7 +26,7 @@ export async function getGame(req: Request, res: Response) {
     }
 }
 
-export async function postGame(req: Request, res: Response) {
+export async function postGame(req: Request, res: Response): Promise<void> {
     const game = res.locals as GameInsertType
     try {
         await insertGame(game.name, game.type_id)
@@ -35,7 +38,7 @@ export async function postGame(req: Request, res: Response) {
 
 }
 
-export async function putGame(req: Request, res: Response) {
+export async function putGame(req: Request, res: Response): Promise<void> {
     const game = res.locals as GameEntity
     try {
         await updateGame(game.id)
@@ -46,7 +49,7 @@ export async function putGame(req: Request, res: Response) {
     }
 }
 
-export async function deleteGame(req: Request, res: Response) {
+export async function deleteGame(req: Request, res: Response): Promise<void> {
     const game = res.locals as GameEntity
     try {
         await delGame(game.id)

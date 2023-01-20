@@ -6,8 +6,8 @@ export async function findGameByName(gameName: String): Promise<QueryResult<Game
     return connection.query("SELECT * FROM games WHERE name=$1", [gameName])
 }
 
-export async function insertGame(name: String, type_id: Number) {
-    return connection.query('INSERT INTO games (name,type_id) VALUES ($1,$2)', [name, type_id])
+export async function insertGame(name: String, type_id: Number): Promise<void> {
+    await connection.query('INSERT INTO games (name,type_id) VALUES ($1,$2)', [name, type_id])
 }
 
 export async function findAllGames(): Promise<QueryResult<GamesAll>> {
@@ -22,10 +22,10 @@ export async function findGameById(game_id: Number): Promise<QueryResult<GameEnt
     return connection.query('SELECT * FROM games WHERE id=$1', [game_id])
 }
 
-export async function updateGame(game_id: Number) {
-    return connection.query(`UPDATE games SET completed=true WHERE id=$1`, [game_id])
+export async function updateGame(game_id: Number): Promise<void> {
+    await connection.query(`UPDATE games SET completed=true WHERE id=$1`, [game_id])
 }
 
-export async function delGame(game_id: Number) {
-    return connection.query("DELETE FROM games WHERE id=$1",[game_id])
+export async function delGame(game_id: Number): Promise<void> {
+    await connection.query("DELETE FROM games WHERE id=$1", [game_id])
 }
