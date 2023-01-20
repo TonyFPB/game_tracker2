@@ -6,6 +6,6 @@ export async function findTypeByName(typeName: String): Promise<QueryResult<Type
     return connection.query('SELECT * FROM types WHERE name=$1', [typeName])
 }
 
-export async function createType(tyepeName: String) {
-    return connection.query('INSERT INTO types (name) VALUES ($1)', [tyepeName])
+export async function createType(tyepeName: String):Promise<void> {
+    await connection.query('INSERT INTO types (name) VALUES ($1)', [tyepeName])
 }
