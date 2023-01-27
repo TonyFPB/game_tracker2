@@ -1,7 +1,7 @@
-import e, { Request, Response } from "express";
-import { GameEntity, GameInsertType, NewGame } from "../protocols/game.protocols.js";
+import { Request, Response } from "express";
+import { NewGame } from "../protocols/game.protocols.js";
 import gamesServices from "../services/games.services.js";
-// import { delGame, findAllGames, findGamesWithQuery, insertGame, updateGame } from "../repositories/games.repositories.js";
+
 
 
 export async function getGame(req: Request, res: Response): Promise<void> {
@@ -13,6 +13,21 @@ export async function getGame(req: Request, res: Response): Promise<void> {
         const e = err()
         if (e.name === 'NotFoundError') {
             res.sendStatus(404)
+            return
+        }
+        res.sendStatus(500)
+    }
+}
+
+export async function getAllGamesUser(req:Request, res: Response){
+    const user_id: string = req.params.user_id
+    try{
+        const userData = await gamesServices.getGameUser(user_id)
+        res.send(userData)
+    }catch(err){
+        const e = err()
+        if(e.name === "NotFoundError"){
+            res.status(404).send(e)
             return
         }
         res.sendStatus(500)

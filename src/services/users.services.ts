@@ -8,9 +8,17 @@ async function postNewUser(nameUser: string): Promise<void> {
     return await usersRepository.createUser(nameUser)
 }
 
+async function findUser(nameUser: string){
+    const userExits = await usersRepository.findUserByName(nameUser)
+    if (!userExits) throw () => { return { name: "NotFoundError" } }
+
+    return userExits
+}
+
 
 const userServices = {
-    postNewUser
+    postNewUser,
+    findUser
 }
 
 export default userServices

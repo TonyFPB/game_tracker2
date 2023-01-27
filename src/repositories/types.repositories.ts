@@ -9,7 +9,6 @@ export async function findTypeByName(typeName: string): Promise<TypeEntity> {
         }
     })
     return data
-    // return connection.query('SELECT * FROM types WHERE name=$1', [typeName])
 }
 
 export async function createType(tyepeName: string):Promise<void> {
@@ -18,7 +17,6 @@ export async function createType(tyepeName: string):Promise<void> {
             name: tyepeName
         }
     })
-    // await connection.query('INSERT INTO types (name) VALUES ($1)', [tyepeName])
 }
 
 const typeRepository = {
