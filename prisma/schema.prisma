@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model games {
+  id          Int           @id @default(autoincrement())
+  name        String        @unique
+  type_id     Int
+  types       types         @relation(fields: [type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "games_fk0")
+  games_users games_users[]
+}
+
+model types {
+  id    Int     @id @default(autoincrement())
+  name  String  @unique
+  games games[]
+}
+
+model games_users {
+  id        Int     @id(map: "games_users_pk") @default(autoincrement())
+  user_id   Int
+  game_id   Int
+  completed Boolean @default(false)
+  users     users   @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "games_users_fk0")
+  games     games   @relation(fields: [game_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "games_users_fk1")
+}
+
+model users {
+  id          Int           @id(map: "users_pk") @default(autoincrement())
+  name        String        @unique
+  games_users games_users[]
+}
