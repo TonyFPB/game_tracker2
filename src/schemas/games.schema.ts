@@ -1,7 +1,8 @@
 import Joi from "joi";
 
 const gameSchema = Joi.object({
-    name: Joi.string().required(),
+    userName: Joi.string().required(),
+    game: Joi.string().required(),
     type: Joi.string().required()
 })
 

@@ -1,5 +1,5 @@
 type TypeEntity = {
-    id: Number,
-    name: String
+    id: number,
+    name: string
 }
 export {TypeEntity}

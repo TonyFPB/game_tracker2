@@ -1,25 +1,15 @@
 import { Request, Response, NextFunction } from "express";
-import { Game, GameEntity } from "../protocols/game.protocols.js";
+import { NewGame, GameEntity } from "../protocols/game.protocols.js";
 import { findGameById, findGameByName } from "../repositories/games.repositories.js";
 import { createType, findTypeByName } from "../repositories/types.repositories.js";
-import gameSchema from "../schemas/games.schema.js";
 
 
-export function gamesValidate(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const body = req.body as Game
-    const { error } = gameSchema.validate(body, { abortEarly: false })
-    if (error) {
-        res.status(422).send({ message: error.details.map(d => d.message) })
-        return;
-    }
-    next()
-}
 
 export async function gameConflict(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const body = req.body as Game
+    const body = req.body as NewGame
     try {
-        const gamesExists = await findGameByName(body.name.toLowerCase())
-        if (gamesExists.rowCount > 0) {
+        const gamesExists = await findGameByName(body.game.toLowerCase())
+        if (gamesExists) {
             res.sendStatus(409)
             return;
         }
@@ -31,19 +21,19 @@ export async function gameConflict(req: Request, res: Response, next: NextFuncti
 }
 
 export async function validateType(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const body = req.body as Game
-    body.name = body.name.toLocaleLowerCase()
+    const body = req.body as NewGame
+    body.game = body.game.toLocaleLowerCase()
     body.type = body.type.toLocaleLowerCase()
     try {
         const typeExists = await findTypeByName(body.type)
-        if (typeExists.rowCount === 0) {
+        if (!typeExists) {
             await createType(body.type)
             const type = await findTypeByName(body.type)
-            res.locals = { name: body.name, type_id: type.rows[0].id }
+            res.locals = { name: body.game, type_id: type.id }
         }
-        if (typeExists.rowCount > 0) {
+        if (typeExists) {
             const type = await findTypeByName(body.type)
-            res.locals = { name: body.name, type_id: type.rows[0].id }
+            res.locals = { name: body.game, type_id: type.id }
         }
     } catch (err) {
         console.log(err)
@@ -61,15 +51,15 @@ export async function validateGameIdPut(req: Request, res: Response, next: NextF
         }
 
         const gamesExists = await findGameById(Number(game_id))
-        if (gamesExists.rowCount === 0) {
+        if (!gamesExists) {
             res.sendStatus(404)
             return;
         }
-        if (gamesExists.rows[0].completed) {
+        if (gamesExists.completed) {
             res.status(400).send({ message: "The game is already finished." })
             return;
         }
-        res.locals = gamesExists.rows[0] as GameEntity
+        res.locals = gamesExists as GameEntity
     } catch (err) {
         console.log(err)
         res.sendStatus(500)
@@ -86,15 +76,15 @@ export async function validateGameIdDelete(req: Request, res: Response, next: Ne
         }
 
         const gamesExists = await findGameById(Number(game_id))
-        if (gamesExists.rowCount === 0) {
+        if (!gamesExists) {
             res.sendStatus(404)
             return
         }
-        if (!gamesExists.rows[0].completed) {
+        if (!gamesExists.completed) {
             res.status(400).send({ message: "The game is not finished yet." })
             return;
         }
-        res.locals = gamesExists.rows[0] as GameEntity
+        res.locals = gamesExists as GameEntity
     } catch (err) {
         console.log(err)
         res.sendStatus(500)
