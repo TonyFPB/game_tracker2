@@ -31,7 +31,8 @@ async function postNewGame(body: NewGame) {
         return;
     }
 
-    const userGameExists = gamesRepository.findGameUser(userExits.id, gamesExists.id)
+    const userGameExists = await gamesRepository.findGameUser(userExits.id, gamesExists.id)
+    console.log(userGameExists)
     if (userGameExists) throw () => { return { name: "ConflictError" } }
 
     await gamesRepository.upsertUserGame(userExits.id, gamesExists.id)
@@ -69,10 +70,22 @@ async function updateGame(user_id: string, game_id: string) {
 
 }
 
+async function deleteGame(user_id: string, game_id: string){
+    if (isNaN(Number(user_id)) || isNaN(Number(game_id))) throw () => { return { name: "NotFoundError", message: "User or game not found" } }
+
+    const gameUser = await gamesRepository.findGameUser(Number(user_id), Number(game_id))
+    if (!gameUser) throw () => { return { name: "NotFoundError", message: "User does not have the game yet" } }
+
+    if(!gameUser.completed) throw () => { return { name: "BadRequest", message: "The game is not finished. Please complete the game." } }
+
+    await gamesRepository.delGame(gameUser.id)
+}
+
 const gamesServices = {
     postNewGame,
     getGames,
-    updateGame
+    updateGame,
+    deleteGame
 }
 
 export default gamesServices

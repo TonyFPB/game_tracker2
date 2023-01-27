@@ -93,12 +93,8 @@ export async function findGameById(game_id: number) {
     // return connection.query('SELECT * FROM games WHERE id=$1', [game_id])
 }
 
-// export async function updateGame(game_id: number): Promise<void> {
-//     await connection.query(`UPDATE games SET completed=true WHERE id=$1`, [game_id])
-// }
-
 export async function delGame(game_id: number): Promise<void> {
-    await prisma.games.delete({
+    await prisma.games_users.delete({
         where: {
             id: game_id
         }
