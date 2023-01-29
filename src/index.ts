@@ -8,9 +8,6 @@ server.use(express.json())
 server.use(gamesRoutes)
 server.use(usersRoutes)
 
-server.get('/teste', async (req,res)=> {
-    const teste = await findGameByName('pes')
-    res.send(teste)
-})
+
 const port = process.env.PORT || 4000
 server.listen(port, ()=>console.log(`Server is running on port:${port}`))
