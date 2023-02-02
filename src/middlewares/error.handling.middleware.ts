@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
-export function handleErros(err, req, res, next) {
-  console.log(err, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+export function handleErros(err: Erros, req: Request, res: Response, next: NextFunction) {
+  
   if (err.name === "NotFoundError") {
     res.status(404).send(err);
     return;
