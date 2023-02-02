@@ -1,13 +1,13 @@
 import prisma from "../src/database/data.js"
 
 async function main() {
-    await prisma.users.create({
+    await prisma.user.create({
         data: {
             name: "joseph"
         }
     })
 
-    await prisma.types.createMany({
+    await prisma.type.createMany({
         data: [{
             name: "esporte"
         },
@@ -17,7 +17,7 @@ async function main() {
         ]
     })
 
-    await prisma.games.createMany({
+    await prisma.game.createMany({
         data: [{
             name: "fifa",
             type_id: 1

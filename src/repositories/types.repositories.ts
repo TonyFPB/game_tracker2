@@ -1,9 +1,9 @@
 
-import prisma from "../database/data.js"
-import { TypeEntity } from "../protocols/type.protocols.js"
+import prisma from "../database/data"
+import { TypeEntity } from "../protocols/type.protocols"
 
 export async function findTypeByName(typeName: string): Promise<TypeEntity> {
-    const data = await prisma.types.findFirst({
+    const data = await prisma.type.findFirst({
         where:{
             name: typeName
         }
@@ -12,7 +12,7 @@ export async function findTypeByName(typeName: string): Promise<TypeEntity> {
 }
 
 export async function createType(tyepeName: string):Promise<void> {
-    await prisma.types.create({
+    await prisma.type.create({
         data:{
             name: tyepeName
         }

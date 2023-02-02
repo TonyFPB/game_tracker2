@@ -1,9 +1,9 @@
-import prisma  from "../database/data.js";
-import { UserEntity } from "../protocols/users.protocols.js";
+import prisma  from "../database/data";
+import { UserEntity } from "../protocols/users.protocols";
 
 
 async function findUserByName(name: string): Promise<UserEntity>{
-    const data = await prisma.users.findUnique({
+    const data = await prisma.user.findUnique({
         where:{
             name: name
         }
@@ -12,7 +12,7 @@ async function findUserByName(name: string): Promise<UserEntity>{
 }
 
 async function createUser(name: string){
-    await prisma.users.create({
+    await prisma.user.create({
         data:{
             name: name
         }

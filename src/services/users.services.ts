@@ -1,4 +1,4 @@
-import usersRepository from "../repositories/users.repositories.js";
+import usersRepository from "../repositories/users.repositories";
 
 
 async function postNewUser(nameUser: string): Promise<void> {

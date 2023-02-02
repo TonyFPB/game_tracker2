@@ -1,6 +1,6 @@
 import { Response, Request } from "express";
-import { UserBody } from "../protocols/users.protocols.js";
-import userServices from "../services/users.services.js";
+import { UserBody } from "../protocols/users.protocols";
+import userServices from "../services/users.services";
 
 
 export async function postUser(req: Request, res: Response): Promise<void> {

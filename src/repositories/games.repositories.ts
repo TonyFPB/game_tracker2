@@ -1,9 +1,9 @@
 
-import prisma from "../database/data.js";
-import { GameEntity, GamesAll } from "../protocols/game.protocols.js";
+import prisma from "../database/data";
 
 export async function findGameByName(gameName: string) {
-    const data = await prisma.games.findUnique({
+    
+    const data = await prisma.game.findUnique({
         where: {
             name: gameName
         },
@@ -14,23 +14,21 @@ export async function findGameByName(gameName: string) {
         },
     })
     return data
-    // return connection.query("SELECT * FROM games WHERE name=$1", [gameName])
 }
 
 
 
 async function createGame(game: string, type_id: number): Promise<void> {
-    await prisma.games.create({
+    await prisma.game.create({
         data:{
             name: game,
             type_id:type_id
         }
     })
-    // await connection.query('INSERT INTO games (name,type_id) VALUES ($1,$2)', [name, type_id])
 }
 
 async function upsertUserGame(user_id: number, game_id: number, id?:number){
-    await prisma.games_users.upsert({
+    await prisma.gameUser.upsert({
         where:{
             id: id || 0
         },
@@ -45,7 +43,7 @@ async function upsertUserGame(user_id: number, game_id: number, id?:number){
 }
 
 async function findGameUser(user_id: number, game_id: number){
-    const data = await prisma.games_users.findFirst({
+    const data = await prisma.gameUser.findFirst({
         where:{
             game_id:game_id,
             user_id:user_id
@@ -55,7 +53,7 @@ async function findGameUser(user_id: number, game_id: number){
 }
 
 async function findGameUserByUserId(user_id: number){
-    const data = await prisma.games_users.findMany({
+    const data = await prisma.gameUser.findMany({
         where:{
             user_id: user_id
         },
@@ -76,7 +74,7 @@ async function findGameUserByUserId(user_id: number){
 
 
 async function findAllGames(){
-    const data = await prisma.games.findMany({
+    const data = await prisma.game.findMany({
         select:{
             id: true,
             name:true,
@@ -85,11 +83,10 @@ async function findAllGames(){
     })
     
     return data
-    // return connection.query("SELECT g.id,INITCAP(g.name) AS name,g.completed,g.type_id, t.name AS type FROM games g JOIN types t ON g.type_id=t.id ORDER BY g.id;")
 }
 
 async function findGamesWithQuery(game: string){
-    const data = await prisma.games.findMany({
+    const data = await prisma.game.findMany({
         where:{
             name:{
                 startsWith:game,
@@ -102,26 +99,26 @@ async function findGamesWithQuery(game: string){
         },
     })
     return data
-    //     return connection.query("SELECT g.id,INITCAP(g.name) AS name,g.completed,g.type_id, t.name AS type FROM games g JOIN types t ON g.type_id=t.id WHERE g.name LIKE $1 ORDER BY g.id;", [`${game}%`])
+   
 }
 
 async function findGameById(game_id: number) {
-    const data = await prisma.games_users.findUnique({
+    const data = await prisma.gameUser.findUnique({
         where: {
             id:game_id
         }
     })
     return data
-    // return connection.query('SELECT * FROM games WHERE id=$1', [game_id])
+    
 }
 
 async function delGame(game_id: number): Promise<void> {
-    await prisma.games_users.delete({
+    await prisma.gameUser.delete({
         where: {
             id: game_id
         }
     })
-    // await connection.query("DELETE FROM games WHERE id=$1", [game_id])
+    
 }
 
 const gamesRepository = {
