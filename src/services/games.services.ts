@@ -128,19 +128,18 @@ async function deleteGame(user_id: string, game_id: string) {
 }
 
 async function getGameUser(user_id: string) {
-  if (isNaN(Number(user_id)))
-    throw () => {
-      return { name: "NotFoundError", message: "User not found" };
-    };
+  if (isNaN(Number(user_id))) {
+    throw { name: "NotFoundError", message: "User not found" };
+  };
 
   const user = await gamesRepository.findGameUserByUserId(Number(user_id));
-  if (!user)
-    throw () => {
-      return {
-        name: "NotFoundError",
-        message: "User does not have the game yet",
-      };
+
+  if (user.length === 0) {
+    throw {
+      name: "NotFoundError",
+      message: "User does not have the game yet",
     };
+  };
 
   return user;
 }

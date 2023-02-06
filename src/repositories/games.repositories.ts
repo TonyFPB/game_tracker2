@@ -58,6 +58,7 @@ async function findGameUserByUserId(user_id: number){
             user_id: user_id
         },
         select:{
+            id:true,
             users:true,
             games:{
                 select:{
